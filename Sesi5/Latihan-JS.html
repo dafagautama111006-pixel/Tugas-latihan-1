@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung Galaxy Store - E-Commerce Sederhana</title>
+    <style>
+        
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #121212;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* Styling Filter */
+        .filter-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-container label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .filter-container select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        /* Styling Produk */
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px; 
+            object-fit: contain; 
+            padding: 10px;
+        }
+
+        .product-card h3 {
+            color: #007bff; 
+            margin: 10px 0;
+        }
+
+        .product-card .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .product-card .description {
+            font-size: 0.9em;
+            color: #666;
+            padding: 0 15px 10px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            background-color: #ddd;
+            color: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📱 Samsung Galaxy Store</h1>
+        <p>Temukan Smartphone Samsung Impian Anda</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="filter-container">
+            <label for="categoryFilter">Filter Kategori:</label>
+            <select id="categoryFilter" onchange="filterProducts(this.value)">
+                <option value="Semua">Semua Kategori</option>
+                <option value="Flagship">Flagship (Seri S/Z)</option>
+                <option value="Mid-Range">Mid-Range (Seri A)</option>
+                <option value="Entry-Level">Entry-Level (Seri M)</option>
+            </select>
+        </div>
+
+        <div id="product-list">
+            </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Samsung Galaxy Store. Dibuat dengan HTML, CSS, & JavaScript.</p>
+    </footer>
+
+    <script>
+ 
+const products = [
+
+    {
+        id: 1,
+        name: "Samsung Galaxy S24 Ultra",
+        price: "Rp 19.999.000",
+        description: "Flagship utama dengan Galaxy AI, S Pen, dan kamera 200MP. Desain Titanium.",
+        category: "Flagship",
+        image: "gambar/S24U.jpg"
+    },
+    {
+        id: 2,
+        name: "Samsung Galaxy Z Fold5",
+        price: "Rp 24.999.000",
+        description: "Ponsel lipat produktivitas, layar tablet besar, dan mode multi-tasking.",
+        category: "Flagship",
+        image: "gambar/F5.jpg"
+    },
+    {
+        id: 3,
+        name: "Samsung Galaxy S24+",
+        price: "Rp 16.999.000",
+        description: "Keseimbangan sempurna antara daya dan desain, dilengkapi layar QHD+ dan AI.",
+        category: "Flagship",
+        image: "gambar/S24P.jpeg"
+    },
+    {
+        id: 4,
+        name: "Samsung Galaxy Z Flip5",
+        price: "Rp 14.999.000",
+        description: "Ponsel lipat gaya dengan layar Cover yang besar untuk notifikasi dan selfie.",
+        category: "Flagship",
+        image: "gambar/FL5.jpg"
+    },
+    {
+        id: 5,
+        name: "Samsung Galaxy S23 FE",
+        price: "Rp 9.999.000",
+        description: "Edisi Fan yang membawa fitur-fitur premium Flagship dengan harga lebih terjangkau.",
+        category: "Flagship",
+        image: "gambar/S23FE.jpg"
+    },
+    
+    {
+        id: 6,
+        name: "Samsung Galaxy A55 5G",
+        price: "Rp 5.999.000",
+        description: "The Awesome Phone: Layar AMOLED 120Hz, bodi metal, dan kamera utama OIS yang stabil.",
+        category: "Mid-Range",
+        image: "gambar/A55.webp"
+    },
+    {
+        id: 7,
+        name: "Samsung Galaxy A35 5G",
+        price: "Rp 4.999.000",
+        description: "Performa seimbang untuk sehari-hari, didukung Exynos dan desain premium.",
+        category: "Mid-Range",
+        image: "gambar/A35.webp"
+    },
+    {
+        id: 8,
+        name: "Samsung Galaxy A25 5G",
+        price: "Rp 3.999.000",
+        description: "Pilihan 5G yang terjangkau dengan layar Super AMOLED dan speaker stereo.",
+        category: "Mid-Range",
+        image: "gambar/A25.jpeg"
+    },
+    {
+        id: 9,
+        name: "Samsung Galaxy A15 5G",
+        price: "Rp 3.299.000",
+        description: "Akses ke jaringan 5G dengan layar yang cerah dan memori yang lega.",
+        category: "Mid-Range",
+        image: "gambar/A15.jpeg"
+    },
+    {
+        id: 10,
+        name: "Samsung Galaxy A05s",
+        price: "Rp 2.199.000",
+        description: "Mid-Range ekonomis dengan performa Snapdragon dan pengisian daya cepat.",
+        category: "Mid-Range",
+        image: "gambar/A05.webp"
+    },
+
+    {
+        id: 11,
+        name: "Samsung Galaxy M34 5G",
+        price: "Rp 3.499.000",
+        description: "Monster Baterai 6000mAh, sangat cocok untuk pengguna yang aktif seharian.",
+        category: "Entry-Level",
+        image: "gambar/M34.webp"
+    },
+    {
+        id: 12,
+        name: "Samsung Galaxy M14 5G",
+        price: "Rp 2.799.000",
+        description: "Kombinasi antara baterai besar dan konektivitas 5G yang terjangkau.",
+        category: "Entry-Level",
+        image: "gambar/M14.jpeg"
+    },
+    {
+        id: 13,
+        name: "Samsung Galaxy M04",
+        price: "Rp 1.499.000",
+        description: "Smartphone dasar yang handal untuk kebutuhan komunikasi dan aplikasi ringan sehari-hari.",
+        category: "Entry-Level",
+        image: "gambar/M04.webp"
+    },
+    {
+        id: 14,
+        name: "Samsung Galaxy A05",
+        price: "Rp 1.899.000",
+        description: "Pilihan entry-level dengan layar besar 6.7 inci dan desain modern.",
+        category: "Entry-Level",
+        image: "gambar/A05e.webp"
+    },
+    {
+        id: 15,
+        name: "Samsung Galaxy M54 5G",
+        price: "Rp 6.499.000",
+        description: "Baterai 6000mAh dengan kamera 108MP yang luar biasa, value for money yang tinggi.",
+        category: "Entry-Level",
+        image: "gambar/M54.jpeg"
+    }
+];
+
+        // Mendapatkan elemen tempat produk akan ditampilkan
+        const productListElement = document.getElementById('product-list');
+
+        /**
+         * Fungsi untuk merender daftar produk ke halaman HTML.
+         * @param {Array<Object>} productArray - Array produk yang akan ditampilkan.
+         */
+        function renderProducts(productArray) {
+            // Kosongkan daftar produk yang ada sebelum merender yang baru
+            productListElement.innerHTML = ''; 
+
+            // Looping melalui array produk
+            productArray.forEach(product => {
+                // Membuat elemen div untuk setiap produk (product card)
+                const card = document.createElement('div');
+                card.classList.add('product-card');
+                
+                // Mengisi konten HTML untuk card produk
+                card.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <span class="category-tag">${product.category}</span>
+                    <h3>${product.name}</h3>
+                    <p class="price">${product.price}</p>
+                    <p class="description">${product.description}</p>
+                `;
+
+                // Menambahkan card ke dalam container produk
+                productListElement.appendChild(card);
+            });
+        }
+
+        /**
+         * Fungsi untuk memfilter produk berdasarkan kategori yang dipilih.
+         * Dipanggil ketika nilai dropdown (select) filter berubah.
+         * @param {string} category - Kategori yang dipilih (misalnya 'Flagship', 'Semua').
+         */
+        function filterProducts(category) {
+            let filteredProducts = [];
+            
+            if (category === "Semua") {
+                // Jika "Semua" dipilih, tampilkan semua produk
+                filteredProducts = products;
+            } else {
+                // Filter produk berdasarkan kategori yang dipilih
+                filteredProducts = products.filter(product => product.category === category);
+            }
+
+            // Panggil fungsi render untuk menampilkan produk yang sudah difilter
+            renderProducts(filteredProducts);
+        }
+
+        // Panggil fungsi renderProducts saat halaman pertama kali dimuat
+        // untuk menampilkan SEMUA produk
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+        });
+
+    </script>
+
+</body>
+</html>
